@@ -1,7 +1,8 @@
 // Runs in the page's main world. Wraps getUserMedia to build a disguised
-// (pitch-shifted + blurred) version of each local track, and wraps
-// RTCPeerConnection so the active call's outgoing tracks can be hot-swapped
-// when the popup toggles anonymization on/off.
+// (pitch-shifted audio + distorted video) version of each local track, and
+// wraps RTCPeerConnection so the active call's outgoing tracks can be
+// hot-swapped when the popup toggles anonymization on/off. Video distortion
+// itself (blur/pixelate/puzzle/glitch) lives in video-effects.js.
 
 (function () {
   const currentScript = document.currentScript;
@@ -10,9 +11,13 @@
   const state = {
     enabled: true,
     pitchSemitones: 5,
-    blurPx: 20,
+    mode: 'blur',
+    intensity: 20,
+    puzzleGrid: 4,
+    reshuffleNonce: 0,
     pairs: [], // { rawTrack, processedTrack, kind }
     senders: [], // RTCRtpSender instances seen so far
+    videoEffectStates: [], // per-video-track puzzle permutation state
   };
 
   const nativeGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
@@ -37,7 +42,7 @@
     return dest.stream.getAudioTracks()[0];
   }
 
-  function makeBlurredVideoTrack(rawTrack) {
+  function makeDistortedVideoTrack(rawTrack) {
     const video = document.createElement('video');
     video.srcObject = new MediaStream([rawTrack]);
     video.muted = true;
@@ -46,6 +51,8 @@
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
+    const effectState = {};
+    state.videoEffectStates.push(effectState);
     let stopped = false;
 
     function draw() {
@@ -53,8 +60,7 @@
       if (video.videoWidth) {
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        ctx.filter = `blur(${state.blurPx}px)`;
-        ctx.drawImage(video, 0, 0);
+        window.__callAnonymizerEffects.draw(ctx, video, canvas, state, effectState);
       }
       requestAnimationFrame(draw);
     }
@@ -65,6 +71,8 @@
     rawTrack.addEventListener('ended', () => {
       stopped = true;
       track.stop();
+      const idx = state.videoEffectStates.indexOf(effectState);
+      if (idx !== -1) state.videoEffectStates.splice(idx, 1);
     });
     return track;
   }
@@ -73,7 +81,7 @@
     const processedTrack =
       rawTrack.kind === 'audio'
         ? await makeProcessedAudioTrack(rawTrack)
-        : makeBlurredVideoTrack(rawTrack);
+        : makeDistortedVideoTrack(rawTrack);
     const pair = { rawTrack, processedTrack, kind: rawTrack.kind };
     state.pairs.push(pair);
     return pair;
@@ -127,11 +135,22 @@
 
     const settings = data.settings;
     if (typeof settings.enabled === 'boolean') state.enabled = settings.enabled;
-    if (typeof settings.blurPx === 'number') state.blurPx = settings.blurPx;
+    if (typeof settings.mode === 'string') state.mode = settings.mode;
+    if (typeof settings.intensity === 'number') state.intensity = settings.intensity;
+    if (typeof settings.puzzleGrid === 'number') state.puzzleGrid = settings.puzzleGrid;
     if (typeof settings.pitchSemitones === 'number') {
       state.pitchSemitones = settings.pitchSemitones;
       for (const node of state.pitchNodes || []) {
         node.port.postMessage({ pitchRatio: pitchRatio(state.pitchSemitones) });
+      }
+    }
+    if (
+      typeof settings.reshuffleNonce === 'number' &&
+      settings.reshuffleNonce !== state.reshuffleNonce
+    ) {
+      state.reshuffleNonce = settings.reshuffleNonce;
+      for (const effectState of state.videoEffectStates) {
+        window.__callAnonymizerEffects.resetPuzzle(effectState);
       }
     }
     applyEnabledState();

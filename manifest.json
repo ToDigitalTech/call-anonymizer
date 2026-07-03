@@ -1,23 +1,44 @@
 {
   "manifest_version": 3,
-  "name": "Call Anonymizer for Google Meet",
-  "version": "0.1.0",
-  "description": "Privacy software by To Digital Tech. Temporarily disguise your voice and blur your camera on Google Meet until you're sure who you're talking to.",
+  "name": "Call Anonymizer: Voice & Face Privacy for Meet & Zoom",
+  "version": "0.2.0",
+  "description": "Chrome extension by To Digital Tech. Disguise your voice and blur, pixelate, puzzle-scramble, or glitch your camera on Google Meet and Zoom (web client) until you're sure who you're talking to.",
   "author": "To Digital Tech",
   "homepage_url": "https://github.com/ToDigitalTech/call-anonymizer",
-  "host_permissions": ["https://meet.google.com/*"],
+  "host_permissions": [
+    "https://meet.google.com/*",
+    "https://zoom.us/wc/*",
+    "https://*.zoom.us/wc/*"
+  ],
   "permissions": ["storage", "activeTab"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "toggle-anonymize": {
+      "suggested_key": { "default": "Alt+Shift+A" },
+      "description": "Toggle voice/face anonymization on or off"
+    }
+  },
   "content_scripts": [
     {
-      "matches": ["https://meet.google.com/*"],
+      "matches": [
+        "https://meet.google.com/*",
+        "https://zoom.us/wc/*",
+        "https://*.zoom.us/wc/*"
+      ],
       "js": ["content-script.js"],
       "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["injected.js", "audio-processor.js"],
-      "matches": ["https://meet.google.com/*"]
+      "resources": ["injected.js", "audio-processor.js", "video-effects.js"],
+      "matches": [
+        "https://meet.google.com/*",
+        "https://zoom.us/wc/*",
+        "https://*.zoom.us/wc/*"
+      ]
     }
   ],
   "action": {

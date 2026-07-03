@@ -17,14 +17,32 @@
       <input type="range" id="pitch" min="-12" max="12" step="1" />
     </label>
 
-    <label class="slider-row">
-      Face blur: <span id="blur-value"></span> px
-      <input type="range" id="blur" min="0" max="40" step="2" />
+    <label class="select-row">
+      Face distortion mode
+      <select id="mode">
+        <option value="blur">Blur</option>
+        <option value="pixelate">Pixelate</option>
+        <option value="puzzle">Puzzle scramble</option>
+        <option value="glitch">Glitch</option>
+      </select>
     </label>
 
+    <label class="slider-row" id="intensity-row">
+      Distortion intensity: <span id="intensity-value"></span>
+      <input type="range" id="intensity" min="0" max="40" step="2" />
+    </label>
+
+    <label class="slider-row" id="puzzle-row">
+      Puzzle grid: <span id="puzzle-grid-value"></span> x <span id="puzzle-grid-value-2"></span>
+      <input type="range" id="puzzle-grid" min="2" max="6" step="1" />
+    </label>
+
+    <button type="button" id="reshuffle" class="secondary-row">Reshuffle puzzle</button>
+
     <p class="hint">
-      Changes apply live to your current Meet call. Reload the Meet tab if
-      you don't see an effect.
+      Changes apply live to your current call. Reload the tab if you don't
+      see an effect. Shortcut: <kbd>Alt+Shift+A</kbd> toggles anonymization
+      without opening this popup.
     </p>
 
     <script src="popup.js"></script>
