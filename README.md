@@ -13,19 +13,50 @@ call with an unverified person without exposing your real voice or face.
 Toggle it off once you're confident who you're talking to — live, mid-call,
 no rejoin needed.
 
+**Works with:** Google Meet, and Zoom when joined through the browser
+(the "join from your browser" link, not the desktop app). See
+[Scope](#scope) for exactly which URLs and why.
+
+## Why this exists
+
 This project exists because of a real near-miss: a fake "job interview"
-video call used to build trust before asking the target to run malicious
-code. Anyone can end up on a call with a stranger before they've verified
-who that person really is — this gives you a way to keep your voice and
-face private until you have.
+video call that asked the target to clone and run a GitHub repo mid-call
+as a "coding test." The interviewer's on-camera face didn't match the
+accent being heard, which was the tell that something was wrong — the
+call was ended before any code was run.
+
+This isn't an isolated case. In January 2026, Fireblocks CEO Michael
+Shaulov detailed a North Korea-linked campaign ("Operation Contagious
+Interview," attributed to the Lazarus Group/APT38) that impersonates
+recruiters on LinkedIn, runs real live-video interviews over Google Meet
+to build trust, and then delivers malware disguised as a take-home coding
+assignment shared via GitHub ([CNBC, Jan 30 2026](https://www.cnbc.com/2026/01/30/fireblocks-north-korea-hackers-crypto-job-scam.html)).
+
+Beyond the malware risk, sitting through a live video interview also
+hands a stranger your voice and on-camera mannerisms — material that
+could plausibly be reused to train a voice clone or a "digital twin" for
+a bigger impersonation attack later, against you or someone else. If
+anything about a call feels off, this lets you keep your real voice and
+face private until you've decided the person on the other end is who
+they say they are. It's aimed at anyone currently interviewing and
+navigating a job market where AI-assisted impersonation is a real risk,
+not just a hypothetical one.
 
 ## Scope
 
-- **Platforms:** Google Meet (`https://meet.google.com/*`) and the Zoom
-  **web client** (`https://zoom.us/wc/*` and `https://*.zoom.us/wc/*`). It
-  works by intercepting the browser's `getUserMedia` call, which only
-  exists for in-browser apps — it has **no effect on the Zoom desktop
-  app**, since that app never goes through Chrome's media APIs at all.
+- **Platforms — what it works with:**
+  - ✅ Google Meet (`https://meet.google.com/*`)
+  - ✅ Zoom, only when joined via the **browser web client**
+    (`https://zoom.us/wc/*` and `https://*.zoom.us/wc/*` — the "join from
+    your browser" link)
+  - ❌ Zoom **desktop app** — not possible for a browser extension to
+    reach, since the desktop app never goes through Chrome's media APIs
+  - ❌ Other platforms (Teams, Slack huddles, Discord, etc.) — not
+    supported by this version, though the same technique could extend to
+    any browser-based video call
+
+  It works by intercepting the browser's `getUserMedia` call, which only
+  exists for in-browser apps.
 - **Voice disguise:** real-time pitch shift (granular/overlap-add, no
   external libraries), adjustable in semitones, plus a keyboard shortcut
   (`Alt+Shift+A`) to toggle it instantly without opening the popup.
