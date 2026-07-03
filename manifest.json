@@ -34,11 +34,7 @@
   "web_accessible_resources": [
     {
       "resources": ["injected.js", "audio-processor.js", "video-effects.js"],
-      "matches": [
-        "https://meet.google.com/*",
-        "https://zoom.us/wc/*",
-        "https://*.zoom.us/wc/*"
-      ]
+      "matches": ["https://meet.google.com/*", "https://zoom.us/*", "https://*.zoom.us/*"]
     }
   ],
   "action": {
