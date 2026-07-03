@@ -20,10 +20,19 @@ no rejoin needed.
 ## Why this exists
 
 This project exists because of a real near-miss: a fake "job interview"
-video call that asked the target to clone and run a GitHub repo mid-call
-as a "coding test." The interviewer's on-camera face didn't match the
-accent being heard, which was the tell that something was wrong — the
-call was ended before any code was run.
+video call that asked the target to clone and run a GitHub repo
+(`ai-tech-vision/acnplay-demo`, since taken down or made private) mid-call
+as a "coding test." The recruiting email came from
+`mark@solidus-aitech.io` — a lookalike domain that blends the AITECH
+Cloud Network's former name ("Solidus AI Tech") with its real domain
+(`aitech.io`), not an address either company actually uses. The
+interviewer's on-camera face also didn't match the accent being heard,
+which was the tell that something was wrong — the call was ended before
+any code was run. (AITECH/Solidus AI Tech has [repeatedly warned its own
+community](https://www.linkedin.com/posts/solidus-ai-tech-ltd_facebook-scam-alert-we-would-like-activity-7061349395190943744-Y7CV)
+about unrelated scammers impersonating them this way — this appears to be
+another instance of that same pattern, not something the real company was
+involved in.)
 
 This isn't an isolated case. In January 2026, Fireblocks CEO Michael
 Shaulov detailed a North Korea-linked campaign ("Operation Contagious
