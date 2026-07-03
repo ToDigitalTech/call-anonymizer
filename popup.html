@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>Call Anonymizer</h1>
+
+    <label class="toggle-row">
+      <input type="checkbox" id="enabled" />
+      <span id="enabled-label">Anonymize voice &amp; face</span>
+    </label>
+
+    <label class="slider-row">
+      Voice pitch shift: <span id="pitch-value"></span> semitones
+      <input type="range" id="pitch" min="-12" max="12" step="1" />
+    </label>
+
+    <label class="slider-row">
+      Face blur: <span id="blur-value"></span> px
+      <input type="range" id="blur" min="0" max="40" step="2" />
+    </label>
+
+    <p class="hint">
+      Changes apply live to your current Meet call. Reload the Meet tab if
+      you don't see an effect.
+    </p>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

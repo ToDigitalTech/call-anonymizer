@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Call Anonymizer for Google Meet",
+  "version": "0.1.0",
+  "description": "Privacy software by To Digital Tech. Temporarily disguise your voice and blur your camera on Google Meet until you're sure who you're talking to.",
+  "author": "To Digital Tech",
+  "homepage_url": "https://github.com/ToDigitalTech/call-anonymizer",
+  "host_permissions": ["https://meet.google.com/*"],
+  "permissions": ["storage", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content-script.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js", "audio-processor.js"],
+      "matches": ["https://meet.google.com/*"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Call Anonymizer"
+  }
+}
