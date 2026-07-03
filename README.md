@@ -1,3 +1,6 @@
+<img width="1862" height="1082" alt="Call anon to digital" src="https://github.com/user-attachments/assets/a824760d-0f3a-478a-9d6a-0970a07fe275" />
+
+
 # Call Anonymizer: Voice & Face Privacy for Google Meet & Zoom
 
 **Privacy software by [To Digital Tech](https://github.com/ToDigitalTech).**
